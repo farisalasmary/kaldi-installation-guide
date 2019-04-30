@@ -184,3 +184,27 @@ After you download it, you must change the file permissions as follows:
 
 
 
+    chmod 777 Anaconda3-2019.03-Linux-x86_64.sh
+    ./Anaconda3-2019.03-Linux-x86_64.sh
+
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
+Useful Resources:
+
+Kaldi Installation Tutorial:
+http://jrmeyer.github.io/asr/2016/01/26/Installing-Kaldi.html
+
+Arabic Speech Recognition Article:
+https://medium.com/@omar.merghany95/how-we-built-arabic-speech-recognition-system-using-kaldi-a10a54678180
+
+The dataset used in the article above
+http://www.mgb-challenge.org/arabic_download.html
+
+An Excellent Kaldi Tutorial
+https://www.eleanorchodroff.com/tutorial/kaldi/overview.html
+
+
+
+
+
