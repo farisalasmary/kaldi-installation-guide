@@ -1,4 +1,4 @@
-# kaldi-installation-guide
+# kaldi Installation Guide
 a simple installation guide for how to install kaldi toolkit on Ubuntu 18.04
 
 Start executing the following commands in the same order:
