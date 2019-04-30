@@ -242,7 +242,7 @@ with these lines
 Finally, you run the "run.sh" script and it will work -In Sha Allah-
 
 
-NOTE:  you may need to remove the "data" folder in "s5b" folder
+**NOTE:**  you may need to remove the "data" folder in "s5b" folder
 
     (base) farisalasmary@farisalasmary:~/kaldi/egs/gale_arabic/s5b$ rm -r data/
 
