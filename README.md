@@ -2,7 +2,7 @@
 This is a simple installation guide for how to install kaldi toolkit on Ubuntu 18.04.
 
 
-You can use [this script](install_kaldi.sh) to install Kaldi and compile it. The only thing you need is to install Openfst and SRILM library.
+**Note:** You may use [this script](install_kaldi.sh) to install Kaldi and compile it. The only thing you need is to install Openfst and SRILM library manually.
 
 
 Start executing the following commands in the same order:
