@@ -1,6 +1,10 @@
 # kaldi Installation Guide
 This is a simple installation guide for how to install kaldi toolkit on Ubuntu 18.04.
 
+
+You can use [this script](install_kaldi.sh) to install Kaldi and compile it. The only thing you need is to install Openfst and SRILM library.
+
+
 Start executing the following commands in the same order:
 
     sudo apt-get update
@@ -30,7 +34,7 @@ the output should be:
     you can find bash scripts ".sh" for missing dependencies in "extras" directory. Each time you install a dependency, you run "extras/check_dependencies.sh" to find the next missing dependency.
 
 
------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 
 Run the following command to see the number of cores in your CPU:
@@ -84,7 +88,7 @@ Source:
 http://jrmeyer.github.io/asr/2016/01/26/Installing-Kaldi.html
 
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 Donwload SRILM from this page
 
 http://www.speech.sri.com/projects/srilm/download.html
@@ -145,7 +149,7 @@ Source:
 
 INSTALL file within the library folder
 
----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Download Openfst library:
 
