@@ -1,48 +1,36 @@
 # kaldi Installation Guide
-a simple installation guide for how to install kaldi toolkit on Ubuntu 18.04
+This is a simple installation guide for how to install kaldi toolkit on Ubuntu 18.04.
 
 Start executing the following commands in the same order:
 
-```bash
-sudo apt-get update
-sudo apt-get install g++ make automake autoconf sox libtool subversion python2.7
-sudo apt-get install make
-sudo apt install cmake
+    sudo apt-get update
+    sudo apt-get install g++ make automake autoconf sox libtool subversion python2.7
+    sudo apt-get install make
+    sudo apt install cmake
 
-sudo apt-get install git
-
-
-git clone https://github.com/kaldi-asr/kaldi.git
-
-cd kaldi/tools
+    sudo apt-get install git
 
 
-sudo apt-get install zlib1g-dev
+    git clone https://github.com/kaldi-asr/kaldi.git
 
-extras/install_mkl.sh
-```
+    cd kaldi/tools
+
+
+    sudo apt-get install zlib1g-dev
+
+    extras/install_mkl.sh
+
 
 the output should be:
 
     extras/check_dependencies.sh: all OK.
 
 
-    it means that ALL dependencies are all installed, otherwise, "extras/check_dependencies.sh" will output an error message corresponding to each dependency that is not found.
+ it means that ALL dependencies are all installed, otherwise, "extras/check_dependencies.sh" will output an error message corresponding to each dependency that is not found.
     you can find bash scripts ".sh" for missing dependencies in "extras" directory. Each time you install a dependency, you run "extras/check_dependencies.sh" to find the next missing dependency.
 
-    The following
-    -----------------------------------------------------------------------------------------------------------
-    ** extras directory **
-    -----------------------------------------------------------------------------------------------------------
-    (base) farisalasmary@farisalasmary:~/kaldi/tools$ ls extras/
-    check_dependencies.sh    install_ffv.sh            install_miniconda.sh  install_openblas.sh       install_sctk_patched.sh   install_wpe.sh       sequitur.patch
-    check_for_rnnlm.sh       install_irstlm.sh         install_mkl.sh        install_pfile_utils.sh    install_sequitur.sh       irstlm.patch         srilm.patch
-    install_beamformit.sh    install_jieba.sh          install_mmseg.sh      install_phonetisaurus.sh  install_speex.sh          mikolov_rnnlm.patch  travis_install_bindeps.sh
-    install_cffi.sh          install_kaldi_lm.sh       install_morfessor.sh  install_pocolm.sh         install_srilm.sh          portaudio.patch      travis_script.sh
-    install_chainer.sh       install_liblbfgs.sh       install_mpg123.sh     install_portaudio.sh      install_tensorflow_cc.sh  pthread-2.9.1.patch  travis_show_failures.sh
-    install_faster_rnnlm.sh  install_mikolov_rnnlm.sh  install_nkf.sh        install_sacc.sh           install_tensorflow_py.sh  README.txt
-    (base) farisalasmary@farisalasmary:~/kaldi/tools$
-    -----------------------------------------------------------------------------------------------------------
+
+-----------------------------------------------------------------------------------------
 
 
 Run the following command to see the number of cores in your CPU:
@@ -71,7 +59,7 @@ After that, go to the source code folder to compile it as follows:
     ./configure
 
 
-IMPORTANT NOTE: to compile Kaldi to work with GPUs, do the following:
+**IMPORTANT NOTE:** to compile Kaldi to work with GPUs, do the following:
 
     ./configure --use-cuda --cudatk-dir=/usr/local/cuda/ --cuda-arch=-arch=sm_70
 
@@ -156,6 +144,7 @@ On your keyboard, press "CTRL + X" to save the file, then "Y" to confirm that yo
 Source:
 
 INSTALL file within the library folder
+
 ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Download Openfst library:
