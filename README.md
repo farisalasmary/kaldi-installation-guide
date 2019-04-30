@@ -183,6 +183,71 @@ After you download it, you must change the file permissions as follows:
 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
+
+# Training Kaldi on Arabic LDC Dataset
+
+Go to "egs" folder inside the "kaldi" folder then go to "gale_arabic" recipe.
+
+You have to edit the files    "kaldi/egs/gale_arabic/s5b/local/prepare_data.sh"    and     "kaldi/egs/gale_arabic/s5b/run.sh"
+
+
+by replacing the path of the data
+
+
+    dir1=/export/corpora/LDC/LDC2013S02/
+
+    dir2=/export/corpora/LDC/LDC2013S07/
+
+    dir3=/export/corpora/LDC/LDC2014S07/
+
+    text1=/export/corpora/LDC/LDC2013T17/
+
+    text2=/export/corpora/LDC/LDC2013T04/
+
+    text3=/export/corpora/LDC/LDC2014T17/
+
+
+to your own data path
+
+
+    dir1=/home/farisalasmary/Desktop/LDC_Speech_Dataset/LDC2013S02/
+
+    dir2=/home/farisalasmary/Desktop/LDC_Speech_Dataset/LDC2013S07/
+
+    dir3=/home/farisalasmary/Desktop/LDC_Speech_Dataset/LDC2014S07/
+
+    text1=/home/farisalasmary/Desktop/LDC_Speech_Dataset/LDC2013T17/
+
+    text2=/home/farisalasmary/Desktop/LDC_Speech_Dataset/LDC2013T04/
+
+    text3=/home/farisalasmary/Desktop/LDC_Speech_Dataset/LDC2014T17/
+
+
+After that,make sure that you replace the following lines in  "kaldi/egs/gale_arabic/s5b/local/cmd.sh" file:
+
+
+    export train_cmd="retry.pl queue.pl --mem 2G"
+    export decode_cmd="retry.pl queue.pl--mem 4G"
+    export mkgraph_cmd="retry.pl queue.pl --mem 8G"
+
+
+with these lines
+
+
+    export train_cmd="retry.pl run.pl --mem 2G"
+    export decode_cmd="retry.pl run.pl --mem 4G"
+    export mkgraph_cmd="retry.pl run.pl --mem 8G"
+
+
+Finally, you run the "run.sh" script and it will work -In Sha Allah-
+
+
+NOTE:  you may need to remove the "data" folder in "s5b" folder
+
+    (base) farisalasmary@farisalasmary:~/kaldi/egs/gale_arabic/s5b$ rm -r data/
+
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+
 Useful Resources:
 
 Kaldi Installation Tutorial:
