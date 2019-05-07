@@ -449,14 +449,14 @@ and go to this section:
         --dir $dir  || exit 1;
 
 
-add the following line  **--use-gpu=wait \\** as an argument to the command steps/nnet3/chain/train.py
+add the following line  **--use-gpu=wait \\** as an argument to the script steps/nnet3/chain/train.py
 
 
       steps/nnet3/chain/train.py --stage $train_stage \
 
         --cmd "$decode_cmd" \
 
-        **--use-gpu=wait \\**
+        --use-gpu=wait \
 
         --feat.online-ivector-dir $train_ivector_dir \
 
@@ -539,6 +539,9 @@ http://www.mgb-challenge.org/arabic_download.html
 
 An Excellent Kaldi Tutorial
 https://www.eleanorchodroff.com/tutorial/kaldi/overview.html
+
+GPU Architectures
+https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
 
 
 
