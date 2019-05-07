@@ -246,6 +246,284 @@ Finally, you run the "run.sh" script and it will work -In Sha Allah-
 
     (base) farisalasmary@farisalasmary:~/kaldi/egs/gale_arabic/s5b$ rm -r data/
 
+
+
+________________________________________________________________________________________________________________________________________________________________
+## Common Errors and Their Solutions
+
+This section will be updated frequently -In Sha Allah- after each encountered error.
+
+Since we are currently working on Ubuntu 18.04, those errors may occur again after retraining.
+
+
+#### 1- Error #1
+
+you may encounter this error:
+
+    LOG (copy-transition-model[5.5.313~1-203c]:main():copy-transition-model.cc:62) Copied transition model.
+    2019-04-30 21:31:19,610 [steps/nnet3/chain/train.py:339 - train - INFO ] Initializing a basic network for estimating preconditioning matrix
+    2019-04-30 21:31:19,683 [steps/nnet3/chain/train.py:361 - train - INFO ] Generating egs
+    steps/nnet3/chain/get_egs.sh --frames-overlap-per-eg 0 --constrained false --cmd retry.pl run.pl --mem 4G --cmvn-opts --norm-means=false --norm-vars=false --online-ivector-dir exp/nnet3/ivectors_train_sp_
+    hires --left-context 35 --right-context 35 --left-context-initial -1 --right-context-final -1 --left-tolerance 5 --right-tolerance 5 --frame-subsampling-factor 3 --alignment-subsampling-factor 3 --stage -
+    10 --frames-per-iter 1500000 --frames-per-eg 150,110,100 --srand 0 data/train_sp_hires exp/chain/tdnn_1a_sp exp/chain/tri3b_train_sp_lats exp/chain/tdnn_1a_sp/egs
+    feat-to-len 'scp:head -n 10 data/train_sp_hires/feats.scp|' ark,t:-
+    steps/nnet3/chain/get_egs.sh: File data/train_sp_hires/utt2uniq exists, so ensuring the hold-out set includes all perturbed versions of the same source utterance.
+    steps/nnet3/chain/get_egs.sh: Number of utterances is very small. Please check your data.
+    Traceback (most recent call last):
+      File "steps/nnet3/chain/train.py", line 624, in main
+        train(args, run_opts)
+      File "steps/nnet3/chain/train.py", line 387, in train
+        stage=args.egs_stage)
+      File "steps/libs/nnet3/train/chain_objf/acoustic_model.py", line 118, in generate_chain_egs
+       egs_opts=egs_opts if egs_opts is not None else ''))
+      File "steps/libs/common.py", line 158, in execute_command
+        p.returncode, command))
+    Exception: Command exited with status 1: steps/nnet3/chain/get_egs.sh --frames-overlap-per-eg 0 --constrained false                 --cmd "retry.pl run.pl --mem 4G"                 --cmvn-opts "--norm-mea
+    ns=false --norm-vars=false"                 --online-ivector-dir "exp/nnet3/ivectors_train_sp_hires"                 --left-context 35                 --right-context 35                 --left-context-ini
+    tial -1                 --right-context-final -1                 --left-tolerance '5'                 --right-tolerance '5'                 --frame-subsampling-factor 3                 --alignment-subsamp
+    ling-factor 3                 --stage -10                 --frames-per-iter 1500000                 --frames-per-eg 150,110,100                 --srand 0                 data/train_sp_hires exp/chain/tdnn
+    _1a_sp exp/chain/tri3b_train_sp_lats exp/chain/tdnn_1a_sp/egs
+
+
+**Solution:**
+
+This error most probably is caused by the command "nextfile" in the "awk" command inside the file "get_egs.sh" in line 160.
+
+    awk -v max_utt=$num_utts_subset '{
+
+            for (n=2;n<=NF;n++) print $n;
+
+            printed += NF-1;
+
+            if (printed >= max_utt) nextfile; }' |
+
+        sort > $dir/valid_uttlist
+
+This is the path:
+
+    kaldi/egs/gale_arabic/s5b/steps/nnet3/chain/get_egs.sh
+
+This error occur since the "awk" command does not support the command "nextfile". So, we have o install "gawk" and use it instead.
+
+    sudo apt install gawk
+
+
+Then replace the previous command "awk" with the new one "gawk" as follows:
+
+
+    gawk -v max_utt=$num_utts_subset '{
+
+            for (n=2;n<=NF;n++) print $n;
+
+            printed += NF-1;
+
+            if (printed >= max_utt) nextfile; }' |
+
+        sort > $dir/valid_uttlist
+
+
+-------------------------------------------------------------------------
+
+
+#### 2- Error #2
+
+    steps/nnet3/chain/get_egs.sh: Finished preparing training examples
+    2019-05-01 17:02:25,683 [steps/nnet3/chain/train.py:410 - train - INFO ] Copying the properties from exp/chain/tdnn_1a_sp/egs to exp/chain/tdnn_1a_sp
+    2019-05-01 17:02:25,695 [steps/nnet3/chain/train.py:424 - train - INFO ] Computing the preconditioning matrix for input features
+    2019-05-01 17:02:57,590 [steps/nnet3/chain/train.py:433 - train - INFO ] Preparing the initial acoustic model.
+    2019-05-01 17:02:58,897 [steps/nnet3/chain/train.py:467 - train - INFO ] Training will run for 6.0 epochs = 441 iterations
+    2019-05-01 17:02:58,991 [steps/nnet3/chain/train.py:509 - train - INFO ] Iter: 0/440    Epoch: 0.00/6.0 (0.0% complete)    lr: 0.000750    
+    run.pl: job failed, log is in exp/chain/tdnn_1a_sp/log/train.0.1.log
+    /home/analytics/kaldi/egs/gale_arabic/s5b/utils//retry.pl: job failed; renaming log file to exp/chain/tdnn_1a_sp/log/train.0.1.log.bak and rerunning
+    run.pl: job failed, log is in exp/chain/tdnn_1a_sp/log/train.0.2.log
+    /home/analytics/kaldi/egs/gale_arabic/s5b/utils//retry.pl: job failed; renaming log file to exp/chain/tdnn_1a_sp/log/train.0.2.log.bak and rerunning
+    run.pl: job failed, log is in exp/chain/tdnn_1a_sp/log/train.0.3.log
+    /home/analytics/kaldi/egs/gale_arabic/s5b/utils//retry.pl: job failed; renaming log file to exp/chain/tdnn_1a_sp/log/train.0.3.log.bak and rerunning
+    run.pl: job failed, log is in exp/chain/tdnn_1a_sp/log/train.0.2.log
+    /home/analytics/kaldi/egs/gale_arabic/s5b/utils//retry.pl: job failed 2 times; log is in exp/chain/tdnn_1a_sp/log/train.0.2.log
+    2019-05-01 17:03:08,157 [steps/libs/common.py:236 - background_command_waiter - ERROR ] Command exited with status 1: retry.pl run.pl --mem 4G --gpu 1 exp/chain/tdnn_1a_sp/log/train.0.2.log                     nnet3-chain-train --use-gpu=yes                      --apply-deriv-weights=False                     --l2-regularize=0.0 --leaky-hmm-coefficient=0.1                       --xent-regularize=0.1                                          --print-interval=10 --momentum=0.0                     --max-param-change=1.414213562373095                     --backstitch-training-scale=0.0                     --backstitch-training-interval=1                     --l2-regularize-factor=0.3333333333333333 --optimization.memory-compression-level=2                     --srand=0                     "nnet3-am-copy --raw=true --learning-rate=0.00075 --scale=1.0 exp/chain/tdnn_1a_sp/0.mdl - |nnet3-copy --edits='set-dropout-proportion name=* proportion=0.0' - - |" exp/chain/tdnn_1a_sp/den.fst                     "ark,bg:nnet3-chain-copy-egs                          --frame-shift=2                         ark:exp/chain/tdnn_1a_sp/egs/cegs.2.ark ark:- |                         nnet3-chain-shuffle-egs --buffer-size=5000                         --srand=0 ark:- ark:- | nnet3-chain-merge-egs                         --minibatch-size=32,16 ark:- ark:- |"                     exp/chain/tdnn_1a_sp/1.2.raw
+    run.pl: job failed, log is in exp/chain/tdnn_1a_sp/log/train.0.3.log
+    /home/analytics/kaldi/egs/gale_arabic/s5b/utils//retry.pl: job failed 2 times; log is in exp/chain/tdnn_1a_sp/log/train.0.3.log
+    2019-05-01 17:03:08,183 [steps/libs/common.py:236 - background_command_waiter - ERROR ] Command exited with status 1: retry.pl run.pl --mem 4G --gpu 1 exp/chain/tdnn_1a_sp/log/train.0.3.log                     nnet3-chain-train --use-gpu=yes                      --apply-deriv-weights=False                     --l2-regularize=0.0 --leaky-hmm-coefficient=0.1                       --xent-regularize=0.1                                          --print-interval=10 --momentum=0.0                     --max-param-change=1.414213562373095                     --backstitch-training-scale=0.0                     --backstitch-training-interval=1                     --l2-regularize-factor=0.3333333333333333 --optimization.memory-compression-level=2                     --srand=0                     "nnet3-am-copy --raw=true --learning-rate=0.00075 --scale=1.0 exp/chain/tdnn_1a_sp/0.mdl - |nnet3-copy --edits='set-dropout-proportion name=* proportion=0.0' - - |" exp/chain/tdnn_1a_sp/den.fst                     "ark,bg:nnet3-chain-copy-egs                          --frame-shift=0                         ark:exp/chain/tdnn_1a_sp/egs/cegs.3.ark ark:- |                         nnet3-chain-shuffle-egs --buffer-size=5000                         --srand=0 ark:- ark:- | nnet3-chain-merge-egs                         --minibatch-size=32,16 ark:- ark:- |"                     exp/chain/tdnn_1a_sp/1.3.raw
+    run.pl: job failed, log is in exp/chain/tdnn_1a_sp/log/train.0.1.log
+    /home/analytics/kaldi/egs/gale_arabic/s5b/utils//retry.pl: job failed 2 times; log is in exp/chain/tdnn_1a_sp/log/train.0.1.log
+    2019-05-01 17:03:08,293 [steps/libs/common.py:236 - background_command_waiter - ERROR ] Command exited with status 1: retry.pl run.pl --mem 4G --gpu 1 exp/chain/tdnn_1a_sp/log/train.0.1.log                     nnet3-chain-train --use-gpu=yes                      --apply-deriv-weights=False                     --l2-regularize=0.0 --leaky-hmm-coefficient=0.1                      --write-cache=exp/chain/tdnn_1a_sp/cache.1  --xent-regularize=0.1                                          --print-interval=10 --momentum=0.0                     --max-param-change=1.414213562373095                     --backstitch-training-scale=0.0                     --backstitch-training-interval=1                     --l2-regularize-factor=0.3333333333333333 --optimization.memory-compression-level=2                     --srand=0                     "nnet3-am-copy --raw=true --learning-rate=0.00075 --scale=1.0 exp/chain/tdnn_1a_sp/0.mdl - |nnet3-copy --edits='set-dropout-proportion name=* proportion=0.0' - - |" exp/chain/tdnn_1a_sp/den.fst                     "ark,bg:nnet3-chain-copy-egs                          --frame-shift=1                         ark:exp/chain/tdnn_1a_sp/egs/cegs.1.ark ark:- |                         nnet3-chain-shuffle-egs --buffer-size=5000                         --srand=0 ark:- ark:- | nnet3-chain-merge-egs                         --minibatch-size=32,16 ark:- ark:- |"                     exp/chain/tdnn_1a_sp/1.1.raw
+
+
+
+**Solution:**
+
+Checkout your GPU architecture in this link:
+
+https://arnon.dk/matching-sm-architectures-arch-and-gencode-for-various-nvidia-cards/
+
+Since our GPU is Nvidia GTX 1080 Ti, configure and re-compile kaldi with architecture "sm_61"
+
+        ./configure --use-cuda --cudatk-dir=/usr/local/cuda/ --cuda-arch=-arch=sm_61
+
+
+#### 3- Error #3
+
+    LOG (nnet3-chain-train[5.5.313~1-203c]:AllocateNewRegion():cu-allocator.cc:506) About to allocate new memory region of 164626432 bytes; current memory info is: free:313M, used:10862M, total:11175M, free/total:0.0280524
+    LOG (nnet3-chain-train[5.5.313~1-203c]:AllocateNewRegion():cu-allocator.cc:506) About to allocate new memory region of 83886080 bytes; current memory info is: free:155M, used:11020M, total:11175M, free/total:0.0139144
+    LOG (nnet3-chain-train[5.5.313~1-203c]:AllocateNewRegion():cu-allocator.cc:506) About to allocate new memory region of 42991616 bytes; current memory info is: free:75M, used:11100M, total:11175M, free/total:0.00675585
+    LOG (nnet3-chain-train[5.5.313~1-203c]:AllocateNewRegion():cu-allocator.cc:506) About to allocate new memory region of 17825792 bytes; current memory info is: free:33M, used:11142M, total:11175M, free/total:0.00299763
+    LOG (nnet3-chain-train[5.5.313~1-203c]:AllocateNewRegion():cu-allocator.cc:506) About to allocate new memory region of 82837504 bytes; current memory info is: free:15M, used:11160M, total:11175M, free/total:0.00138696
+    LOG (nnet3-chain-train[5.5.313~1-203c]:PrintMemoryUsage():cu-allocator.cc:368) Memory usage: 591856896/639631360 bytes currently allocated/total-held; 587/7 blocks currently allocated/free; largest free/allocated block sizes are 83886080/17760256; time taken total/cudaMalloc is 0.00290585/0.00194597, synchronized the GPU 0 times out of 12 frees; device memory info: free:15M, used:11160M, total:11175M, free/total:0.00138696maximum allocated: 602227968current allocated: 591856896
+    ERROR (nnet3-chain-train[5.5.313~1-203c]:AllocateNewRegion():cu-allocator.cc:519) Failed to allocate a memory region of 82837504 bytes.  Possibly this is due to sharing the GPU.  Try switching the GPUs to exclusive mode (nvidia-smi -c 3) and using the option --use-gpu=wait to scripts like steps/nnet3/chain/train.py.  Memory info: free:15M, used:11160M, total:11175M, free/total:0.00
+
+
+
+**Solution:**
+
+As it is written in the error,  Set the GPU to the EXCLUSIVE mode as follows:
+
+        sudo nvidia-smi -c 3
+
+
+After that, edit the following file:
+
+    /home/analytics/kaldi/egs/gale_arabic/s5b/local/chain/run_tdnn.sh
+
+
+and go to this section:
+
+      steps/nnet3/chain/train.py --stage $train_stage \
+
+        --cmd "$decode_cmd" \
+
+        --feat.online-ivector-dir $train_ivector_dir \
+
+        --feat.cmvn-opts "--norm-means=false --norm-vars=false" \
+
+        --chain.xent-regularize $xent_regularize \
+
+        --chain.leaky-hmm-coefficient 0.1 \
+
+        --chain.l2-regularize 0.0 \
+
+        --chain.apply-deriv-weights false \
+
+        --chain.lm-opts="--num-extra-lm-states=2000" \
+
+        --trainer.dropout-schedule $dropout_schedule \
+
+        --trainer.srand=$srand \
+
+        --trainer.max-param-change=2.0 \
+
+        --trainer.num-epochs 6 \
+
+        --trainer.frames-per-iter 1500000 \
+
+        --trainer.optimization.num-jobs-initial 3 \
+
+        --trainer.optimization.num-jobs-final 16 \
+
+        --trainer.optimization.initial-effective-lrate 0.00025 \
+
+        --trainer.optimization.final-effective-lrate 0.000025 \
+
+        --trainer.num-chunk-per-minibatch=64,32 \
+
+        --trainer.add-option="--optimization.memory-compression-level=2" \
+
+        --egs.chunk-width=$chunk_width \
+
+        --egs.dir="$common_egs_dir" \
+
+        --egs.opts "--frames-overlap-per-eg 0 --constrained false" \
+
+        --egs.stage $get_egs_stage \
+
+        --reporting.email="$reporting_email" \
+
+        --cleanup.remove-egs=$remove_egs \
+
+        --feat-dir=$train_data_dir \
+
+        --tree-dir $tree_dir \
+
+        --lat-dir=$lat_dir \
+
+        --dir $dir  || exit 1;
+
+
+add the following line  --use-gpu=wait \  as an argument to the command steps/nnet3/chain/train.py
+
+
+      steps/nnet3/chain/train.py --stage $train_stage \
+
+        --cmd "$decode_cmd" \
+
+        --use-gpu=wait \
+
+        --feat.online-ivector-dir $train_ivector_dir \
+
+        --feat.cmvn-opts "--norm-means=false --norm-vars=false" \
+
+        --chain.xent-regularize $xent_regularize \
+
+        --chain.leaky-hmm-coefficient 0.1 \
+
+        --chain.l2-regularize 0.0 \
+
+        --chain.apply-deriv-weights false \
+
+        --chain.lm-opts="--num-extra-lm-states=2000" \
+
+        --trainer.dropout-schedule $dropout_schedule \
+
+        --trainer.srand=$srand \
+
+        --trainer.max-param-change=2.0 \
+
+        --trainer.num-epochs 6 \
+
+        --trainer.frames-per-iter 1500000 \
+
+        --trainer.optimization.num-jobs-initial 3 \
+
+        --trainer.optimization.num-jobs-final 16 \
+
+        --trainer.optimization.initial-effective-lrate 0.00025 \
+
+        --trainer.optimization.final-effective-lrate 0.000025 \
+
+        --trainer.num-chunk-per-minibatch=64,32 \
+
+        --trainer.add-option="--optimization.memory-compression-level=2" \
+
+        --egs.chunk-width=$chunk_width \
+
+        --egs.dir="$common_egs_dir" \
+
+        --egs.opts "--frames-overlap-per-eg 0 --constrained false" \
+
+        --egs.stage $get_egs_stage \
+
+        --reporting.email="$reporting_email" \
+
+        --cleanup.remove-egs=$remove_egs \
+
+        --feat-dir=$train_data_dir \
+
+        --tree-dir $tree_dir \
+
+        --lat-dir=$lat_dir \
+
+        --dir $dir  || exit 1;
+
+
+
+
+
+
+
+
+
+
+
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 Useful Resources:
